@@ -1,0 +1,57 @@
+attack 1 -->(on form of the website)
+xss
+sql
+.php file inclusion
+
+.........................................
+attack 2 -->(on the websites ip address)
+dos and ddos attack
+
+attacker will write script -->
+for i in {1..1000}
+do
+curl http://192.168.1.92
+done
+
+check--> sudo tail -f /var/log/apache2/error.log
+.....................................................
+attack 3 -->(on the ip of the web server)
+vulnerability scanner
+zaproxy tool
+
+check -->database
+...............................................
+attack 4 -->
+xtable addons
+check--> openvpn
+china range 1.0.0.1
+pakistan range 14.0.0.1
+...............................................
+attack 5 -->
+fail2ban
+check--> /var/log/auth.log
+fail2ban-client status sshd
+............................................................................................................................................................
+
+Challenge: Compatibility Issue
+
+I had a problem when trying to install a tool "xtable-addons" on server. This tool is used for blocking access from specific locations (GeoIP blocking). However, when I tried to install it, I kept getting an error message that said system didn't support the tool.
+
+To fix this issue, I did some research online. I found a helpful blog post that suggested upgrading my server's kernel. The kernel is like the brain of the operating system, and sometimes, software tools need a specific version of it to work correctly.
+
+So, I followed the instructions in the blog post and used a command called "dist upgrade" to upgrade my server's kernel. After the upgrade was done, I tried installing the tool again, and this time, it worked without any problems.
+............................................................................................................................................................
+
+///////rules./////
+///for sql injection///
+alert tcp any any -> 192.168.1.92 80 (msg:"SQL Injection Attempt"; flow:to_server,established; content:"';"; http_uri; nocase; classtype:web-application-attack; sid:100001;)
+
+//for xss//
+alert tcp any any -> 192.168.1.92 80 (msg:"Possible XSS Attack"; flow:to_server,established; content:"<script>"; http_uri; nocase; classtype:web-application-attack; sid:100002;)
+
+///Detect PHP Remote File Inclusion Attempts:///
+
+alert tcp any any -> 192.168.1.92 80 (msg:"Possible PHP Remote File Inclusion Attempt"; flow:to_server,established; content:"include("; http_uri; content:".php"; http_uri; nocase; classtype:web-application-attack; sid:100005;)
+
+
+............................................................................................................................................................
